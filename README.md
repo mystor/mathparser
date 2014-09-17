@@ -7,25 +7,33 @@ Made for maxbittker's [Mojulo](https://github.com/MaxBittker/Mojulo).
 ## Usage
 Include the `mathparser.js` file in your html (`<script src="mathparser.js"></script>`).
 
-Set `mathparser.yy` to expose values to the parser.
+If you are using commonjs, you can also use `var mathparser = require('./mathparser');` to require the math parser, but `mathparser` isn't on npm (and probably never will be).
 
+Parsing an expression will produce a function:
 ```javascript
-mathparser.yy = {
-  fn: {
-    sin: Math.sin,
-    cos: Math.cos
-    // Put your functions here
-  },
-  
-  var: {
-    time: +new Date(),
-    pi: Math.PI
-    // Put any vars exposed to the program here
-  }
-};
+var fun = mathparser.parse('x * y^2 + 5 / sin(x)');
 ```
 
-Evaluate a given expression:
+You can then use that function
 ```javascript
-var resultValue = mathparser.parse(theString);
+var exposedFunctions = {
+  sin: Math.sin,
+  cos: Math.cos,
+  rand: Math.random
+};
+
+var exposedVars = {
+  x: 10,
+  y: 20,
+  pi: Math.PI
+};
+
+var result = fun(exposedFunctions, exposedVars); // 3990.8091802
+```
+
+## Building
+MathParser is implemented as a single `jison` file. You compile it using (unsurprisingly) [jison](http://zaach.github.io/jison/).
+
+```bash
+$ jison mathparser.jison
 ```
