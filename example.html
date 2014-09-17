@@ -1,0 +1,26 @@
+<!doctype html>
+
+<input type="text" id="input">
+<button id="button">Run!</button>
+
+<script src="mathparser.js"></script>
+<script>
+  mathparser.yy = {
+    fn: {
+      sin: Math.sin,
+      cos: Math.cos,
+      rand: Math.random
+    },
+
+    var: {
+      x: 5,
+      y: 10,
+      pi: Math.PI
+    }
+  };
+
+  document.getElementById('button').addEventListener('click', function() {
+    var text = document.getElementById('input').value;
+    console.log(mathparser.parse(text));
+  });
+</script>
