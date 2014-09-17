@@ -82,33 +82,30 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 
 var $0 = $$.length - 1;
 switch (yystate) {
-case 1: return $$[$0-1]; 
+case 1: return new Function('var tmp; return ' + $$[$0-1] + ';'); 
 break;
-case 2: this.$ = $$[$0-2] + $$[$0]; 
+case 2: this.$ = '(' + $$[$0-2] + '+' + $$[$0] + ')'; 
 break;
-case 3: this.$ = $$[$0-2] - $$[$0]; 
+case 3: this.$ = '(' + $$[$0-2] + '-' + $$[$0] + ')'; 
 break;
-case 4: this.$ = $$[$0-2] * $$[$0]; 
+case 4: this.$ = '(' + $$[$0-2] + '*' + $$[$0] + ')'; 
 break;
-case 5: this.$ = $$[$0-2] / $$[$0]; 
+case 5: this.$ = '(' + $$[$0-2] + '/' + $$[$0] + ')'; 
 break;
-case 6: this.$ = Math.pow($$[$0-2], $$[$0]); 
+case 6: this.$ = 'Math.pow(' + $$[$0-2] + ',' + $$[$0] + ')'; 
 break;
-case 7: this.$ = -$$[$0]; 
+case 7: this.$ = '(-' + $$[$0] + ')'; 
 break;
 case 8: this.$ = $$[$0-1]; 
 break;
-case 9: this.$ = Number($$[$0]); 
+case 9: this.$ = ''+Number($$[$0]); 
 break;
 case 10:
-        this.$ = yy.var[$$[$0]];
-        if (typeof this.$ === 'undefined') throw new Error('No variable named: ' + $$[$0] + ' exists!');
+        this.$ = 'typeof (tmp = arguments[1][' + JSON.stringify($$[$0]) + ']) !== "undefined" ? tmp : (function() { throw new Error("No such variable with name: ' + $$[$0] + '") })()'
     
 break;
 case 11:
-        var fn = yy.fn[$$[$0-3]];
-        if (typeof fn === 'undefined') throw new Error('No function named: ' + $$[$0-3] + ' exists!');
-        this.$ = fn.apply(null, $$[$0-1]);
+        this.$ = 'typeof (tmp = arguments[0][' + JSON.stringify($$[$0-3]) + ']) !== "undefined" ? tmp(' + $$[$0-1].join(',') + ') : (function() { throw new Error("No such function with name: ' + $$[$0-3] + '") })()'
     
 break;
 case 12: this.$ = []; 
