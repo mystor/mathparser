@@ -32,7 +32,7 @@
 
 
 equation
-    : expr EOF { return new Function('var tmp; return ' + $1 + ';'); }
+    : expr EOF { return new Function('fns', 'vars', 'var tmp; return ' + $1 + ';'); }
     ;
 
 expr
@@ -45,10 +45,10 @@ expr
     | '(' expr ')' { $$ = $2; }
     | NUMBER { $$ = ''+Number($1); }
     | IDENTIFIER {
-        $$ = 'typeof (tmp = arguments[1][' + JSON.stringify($1) + ']) !== "undefined" ? tmp : (function() { throw new Error("No such variable with name: ' + $1 + '") })()'
+        $$ = '(typeof (tmp = vars[' + JSON.stringify($1) + ']) !== "undefined" ? tmp : (function() { throw new Error("No such variable with name: ' + $1 + '") })())'
     }
     | IDENTIFIER '(' arguments ')' {
-        $$ = 'typeof (tmp = arguments[0][' + JSON.stringify($1) + ']) !== "undefined" ? tmp(' + $3.join(',') + ') : (function() { throw new Error("No such function with name: ' + $1 + '") })()'
+        $$ = '(typeof (tmp = fns[' + JSON.stringify($1) + ']) !== "undefined" ? tmp(' + $3.join(',') + ') : (function() { throw new Error("No such function with name: ' + $1 + '") })())'
     }
     ;
 
