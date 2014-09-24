@@ -12,6 +12,7 @@
 "-"                   return '-';
 "+"                   return '+';
 "^"                   return '^';
+"%"                   return '%';
 "("                   return '(';
 ")"                   return ')';
 ","                   return ',';
@@ -22,7 +23,7 @@
 /* operator associations and precedence */
 
 %left '+' '-'
-%left '*' '/'
+%left '*' '/' '%'
 %left '^'
 %left UMINUS
 
@@ -40,6 +41,7 @@ expr
     | expr '-' expr { $$ = '(' + $1 + '-' + $3 + ')'; }
     | expr '*' expr { $$ = '(' + $1 + '*' + $3 + ')'; }
     | expr '/' expr { $$ = '(' + $1 + '/' + $3 + ')'; }
+    | expr '%' expr { $$ = '(' + $1 + '%' + $3 + ')'; }
     | expr '^' expr { $$ = 'Math.pow(' + $1 + ',' + $3 + ')'; }
     | '-' expr %prec UMINUS { $$ = '(-' + $2 + ')'; }
     | '(' expr ')' { $$ = $2; }
