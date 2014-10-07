@@ -6,6 +6,7 @@
 %%
 \s+                   /* skip whitespace */
 [0-9]+("."[0-9]+)?\b  return 'NUMBER';
+0x[0-9a-f]+\b         return 'NUMBER';
 [a-zA-Z]+             return 'IDENTIFIER';
 "*"                   return '*';
 "/"                   return '/';
