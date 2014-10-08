@@ -8,12 +8,19 @@
 [0-9]+("."[0-9]+)?\b  return 'NUMBER';
 0x[0-9a-f]+\b         return 'NUMBER';
 [a-zA-Z]+             return 'IDENTIFIER';
+"~"                   return '~';
 "*"                   return '*';
 "/"                   return '/';
 "-"                   return '-';
 "+"                   return '+';
-"^"                   return '^';
 "%"                   return '%';
+"&"                   return '&';
+"^|"                  return '^|';
+"^"                   return '^';
+"|"                   return '|';
+">>"                  return '>>';
+"<<"                  return '<<';
+">>>"                 return '>>>';
 "("                   return '(';
 ")"                   return ')';
 ","                   return ',';
@@ -23,10 +30,14 @@
 
 /* operator associations and precedence */
 
+%left '&'
+%left '^|'
+%left '|'
+%left '<<' '>>' '>>>'
 %left '+' '-'
 %left '*' '/' '%'
 %left '^'
-%left UMINUS
+%left UMINUS '~'
 
 %start equation
 
@@ -44,7 +55,14 @@ expr
     | expr '/' expr { $$ = '(' + $1 + '/' + $3 + ')'; }
     | expr '%' expr { $$ = '(' + $1 + '%' + $3 + ')'; }
     | expr '^' expr { $$ = 'Math.pow(' + $1 + ',' + $3 + ')'; }
+	| expr '<<' expr { $$ = '(' + $1 + '<<' + $3 + ')'; }
+	| expr '>>' expr { $$ = '(' + $1 + '>>' + $3 + ')'; }
+	| expr '>>>' expr { $$ = '(' + $1 + '>>>' + $3 + ')'; }
+	| expr '&' expr { $$ = '(' + $1 + '&' + $3 + ')'; }
+	| expr '|' expr { $$ = '(' + $1 + '|' + $3 + ')'; }
+	| expr '^|' expr { $$ = '(' + $1 + '^' + $3 + ')'; }
     | '-' expr %prec UMINUS { $$ = '(-' + $2 + ')'; }
+	| '~' expr { $$ = '(~' + $2 + ')'; }
     | '(' expr ')' { $$ = $2; }
     | NUMBER { $$ = ''+Number($1); }
     | IDENTIFIER {
